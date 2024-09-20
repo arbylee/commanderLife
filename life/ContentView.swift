@@ -11,7 +11,11 @@ struct ContentView: View {
     @State
     private var redLife = 40
     @State
+    private var greenLife = 40
+    @State
     private var blueLife = 40
+    @State
+    private var yellowLife = 40
     @State
     private var blueCommanderDamageColor = "red"
     @State
@@ -29,58 +33,8 @@ struct ContentView: View {
     var body: some View {
         VStack {
             HStack {
-                HStack {
-                    ZStack {
-                        Color(.red)
-                        HStack{
-                            Button(action: redLifeDown, label: {
-                                Text("")
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-                            })
-//                            .background(Color.red)
-//                            .buttonStyle(.borderedProminent)
-//                            .padding()
-//                            .rotationEffect(Angle(degrees: 0))
-                            Button(action: redLifeUp, label: {
-                                Text("")
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            })
-//                            .cornerRadius(6)
-//                            .buttonStyle(.borderedProminent)
-//                            .rotationEffect(Angle(degrees: 0))
-//                            .padding()
-                        }
-                        VLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
-//                        Line()
-//                                   .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
-//                                   .frame(height: 1)
-                        GeometryReader { geometry in
-                            Path {
-                                path in
-                                let width = geometry.size.width
-                                let height = geometry.size.height
-                                path.addLines([
-                                    CGPoint(x: width * 0.35, y: height * 0.4),
-                                    CGPoint(x: width * 0.35, y: height * 0.6),
-                                    CGPoint(x: width * 0.65, y: height * 0.6),
-                                    CGPoint(x: width * 0.65, y: height * 0.4),
-                                ])
-                                path.closeSubpath()
-                            }.fill(Color(red: 255 / 255, green: 200 / 255, blue: 200 / 255))
-//                                .stroke(.black, lineWidth: 20)
-                                .stroke(.black, style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
-                        }
-                        Text(String(redLife))
-                            .rotationEffect(Angle(degrees: 90))
-                            .foregroundStyle(.black)
-                    }
-                }
-                HStack {
-                    ZStack {
-                        Color(.green)
-                    }
-                }
+                CommanderLife(life: $redLife, color: .red)
+                CommanderLife(life: $greenLife, color: .green)
             }
             HStack {
                 GeometryReader { blueGp in
@@ -181,11 +135,7 @@ struct ContentView: View {
                         }
                     }
                 }
-                HStack {
-                    ZStack {
-                        Color(.yellow)
-                    }
-                }
+                CommanderLife(life: $yellowLife, color: .yellow)
             }
 //            Image(systemName: "globe")
 //                .imageScale(.large)
@@ -193,12 +143,6 @@ struct ContentView: View {
 //            Text("Hello, world!")
         }
         .padding()
-    }
-    func redLifeUp() {
-        redLife += 1
-    }
-    func redLifeDown() {
-        redLife -= 1
     }
     func blueLifeUp() {
         blueLife += 1
@@ -234,6 +178,66 @@ struct ContentView: View {
 ////        
 ////    }
 //}
+
+struct CommanderLife : View {
+    func lifeUp() {
+        life += 1
+    }
+    func lifeDown() {
+        life -= 1
+    }
+    @Binding var life : Int
+    var color : Color
+    var body : some View {
+        HStack {
+            ZStack {
+                Color(color)
+                HStack{
+                    Button(action: lifeDown, label: {
+                        Text("")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                    })
+//                            .background(Color.red)
+//                            .buttonStyle(.borderedProminent)
+//                            .padding()
+//                            .rotationEffect(Angle(degrees: 0))
+                    Button(action: lifeUp, label: {
+                        Text("")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    })
+//                            .cornerRadius(6)
+//                            .buttonStyle(.borderedProminent)
+//                            .rotationEffect(Angle(degrees: 0))
+//                            .padding()
+                }
+                VLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
+//                        Line()
+//                                   .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
+//                                   .frame(height: 1)
+                GeometryReader { geometry in
+                    Path {
+                        path in
+                        let width = geometry.size.width
+                        let height = geometry.size.height
+                        path.addLines([
+                            CGPoint(x: width * 0.35, y: height * 0.4),
+                            CGPoint(x: width * 0.35, y: height * 0.6),
+                            CGPoint(x: width * 0.65, y: height * 0.6),
+                            CGPoint(x: width * 0.65, y: height * 0.4),
+                        ])
+                        path.closeSubpath()
+                    }.fill(Color(red: 255 / 255, green: 200 / 255, blue: 200 / 255))
+//                                .stroke(.black, lineWidth: 20)
+                        .stroke(.black, style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
+                }
+                Text(String(life))
+                    .rotationEffect(Angle(degrees: 90))
+                    .foregroundStyle(.black)
+            }
+        }
+    }
+}
 struct Line: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
