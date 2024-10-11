@@ -17,19 +17,26 @@ struct ContentView: View {
     @State
     private var yellowLife = 40
     @State
-    private var blueCommanderDamageColor = "red"
+    private var blueCommanderDamageColor = Color(.red)
     @State
     private var blueRedCommanderDamage = 0
     @State
     private var blueGreenCommanderDamage = 0
     @State
     private var blueYellowCommanderDamage = 0
-    func blueRedCommanderDamageUp() {
-        blueRedCommanderDamage += 1
+    
+    init() {
+        var blueCommander: [AnyHashable: Any] = ["life": 40, "oppColor": Color(.red)]
+        var commanders: [AnyHashable: Any] = [Color(.blue): blueCommander]
+        self.commanders = commanders
     }
-    func blueRedCommanderDamageDown() {
-        blueRedCommanderDamage -= 1
+
+    func changeCDC(commColor: Color, oppColor: Color) {
+        if commColor == Color(.blue) {
+            
+        }
     }
+    
     var body: some View {
         VStack {
             HStack {
@@ -37,104 +44,7 @@ struct ContentView: View {
                 CommanderLife(life: $greenLife, color: .green)
             }
             HStack {
-                GeometryReader { blueGp in
-                    HStack {
-                        ZStack {
-                            Color(.blue)
-                            HStack{
-                                Button(action: blueLifeDown, label: {
-                                    Text("")
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    
-                                })
-                                //                            .background(Color.red)
-                                //                            .buttonStyle(.borderedProminent)
-                                //                            .padding()
-                                //                            .rotationEffect(Angle(degrees: 0))
-                                Button(action: blueLifeUp, label: {
-                                    Text("")
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                })
-                                //                            .cornerRadius(6)
-                                //                            .buttonStyle(.borderedProminent)
-                                //                            .rotationEffect(Angle(degrees: 0))
-                                //                            .padding()
-                            }
-                            //                        Line()
-                            //                                   .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
-                            //                                   .frame(height: 1)
-                            HStack{
-                                Button(action: blueRedCommanderDamageDown, label: {
-                                    Text("")
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                })
-                                //                            .background(Color.red)
-                                //                            .buttonStyle(.borderedProminent)
-                                //                            .padding()
-                                //                            .rotationEffect(Angle(degrees: 0))
-                                Button(action: blueRedCommanderDamageUp, label: {
-                                    Text("")
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                })
-                                //                            .cornerRadius(6)
-                                //                            .buttonStyle(.borderedProminent)
-                                //                            .rotationEffect(Angle(degrees: 0))
-                                //                            .padding()
-                            }.frame(maxHeight: blueGp.size.height / 3)
-                                .background(.red)
-                                .offset(y: blueGp.size.height/3)
-                            
-                            VLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
-
-                            ZStack {
-                                GeometryReader { geometry in
-                                    Path {
-                                        path in
-                                        let width = geometry.size.width
-                                        let height = geometry.size.height
-                                        path.addLines([
-                                            CGPoint(x: width * 0.35, y: height * 0.4),
-                                            CGPoint(x: width * 0.35, y: height * 0.6),
-                                            CGPoint(x: width * 0.65, y: height * 0.6),
-                                            CGPoint(x: width * 0.65, y: height * 0.4),
-                                        ])
-                                        path.closeSubpath()
-                                    }.fill(Color(red: 79.0 / 255, green: 79.0 / 255, blue: 191.0 / 255))
-                                    //                                .stroke(.black, lineWidth: 20)
-                                        .stroke(.black, style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
-                                }
-                                Text(String(blueRedCommanderDamage))
-                                //                                .offset(x: -120)
-                                    .rotationEffect(Angle(degrees: 90))
-                                    .foregroundStyle(.white)
-                            }.offset(y: blueGp.size.height/3)
-                            ZStack {
-                                GeometryReader { geometry in
-                                    Path {
-                                        path in
-                                        let width = geometry.size.width
-                                        let height = geometry.size.height
-                                        path.addLines([
-                                            CGPoint(x: width * 0.35, y: height * 0.4),
-                                            CGPoint(x: width * 0.35, y: height * 0.6),
-                                            CGPoint(x: width * 0.65, y: height * 0.6),
-                                            CGPoint(x: width * 0.65, y: height * 0.4),
-                                        ])
-                                        path.closeSubpath()
-                                    }.fill(Color(red: 79.0 / 255, green: 79.0 / 255, blue: 191.0 / 255))
-                                    //                                .stroke(.black, lineWidth: 20)
-                                        .stroke(.black, style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
-                                }
-                                Text(String(blueLife))
-                                //                                .offset(x: -120)
-                                    .rotationEffect(Angle(degrees: 90))
-                                    .foregroundStyle(.white)
-                            }.offset(y: -blueGp.size.height/6)
-//                            BlueRedDamage
-
-                        }
-                    }
-                }
+                CommanderLifeAndDamage(changeCommanderDamageColor: changeCDC, life: $blueLife, color: .blue, oppColor: blueCommanderDamageColor, damage: $blueRedCommanderDamage)
                 CommanderLife(life: $yellowLife, color: .yellow)
             }
 //            Image(systemName: "globe")
@@ -150,34 +60,129 @@ struct ContentView: View {
     func blueLifeDown() {
         blueLife -= 1
     }
-    func blueGreenCommanderDamageUp() {
-        blueGreenCommanderDamage += 1
-    }
-    func blueYellowCommanderDamageUp() {
-        blueYellowCommanderDamage += 1
-    }
-    func blueGreenCommanderDamageDown() {
-        blueGreenCommanderDamage -= 1
-    }
-    func blueYellowCommanderDamageDown() {
-        blueYellowCommanderDamage -= 1
-    }
 }
 
-//struct BlueRedDamage : View {
-//    
-//    @Binding var blueCommanderDamageColor: String
-//    @Binding var blueRedCommanderDamage: Int
-//    @Binding var blueGpSize: CGSize
-////    init(gpSize: CGSize, blueRedCommanderDamage: Int, blueCommanderDamageColor: String) {
-////        self.blueRedCommanderDamage = 1
-////        self.blueCommanderDamageColor = "asdf"
-////        self.blueGpSize = blueGpSize
-////    }
-////    var body : some View {
-////        
-////    }
-//}
+struct CommanderLifeAndDamage : View {
+    var changeCommanderDamageColor: (Color, Color) -> ()
+    @Binding var life: Int
+    var color: Color
+    var oppColor: Color
+    @Binding var damage: Int
+    
+    func lifeUp() {
+        life += 1
+    }
+    func lifeDown() {
+        life -= 1
+    }
+    func damageUp() {
+        damage += 1
+    }
+    func damageDown() {
+        damage -= 1
+    }
+
+    var body : some View {
+            GeometryReader { blueGp in
+                HStack {
+                    ZStack {
+                        Color(.blue)
+                        HStack{
+                            Button(action: lifeDown, label: {
+                                Text("")
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                
+                            })
+                            //                            .background(Color.red)
+                            //                            .buttonStyle(.borderedProminent)
+                            //                            .padding()
+                            //                            .rotationEffect(Angle(degrees: 0))
+                            Button(action: lifeUp, label: {
+                                Text("")
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            })
+                            //                            .cornerRadius(6)
+                            //                            .buttonStyle(.borderedProminent)
+                            //                            .rotationEffect(Angle(degrees: 0))
+                            //                            .padding()
+                        }
+                        //                        Line()
+                        //                                   .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
+                        //                                   .frame(height: 1)
+                        HStack{
+                            Button(action: damageDown, label: {
+                                Text("")
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            })
+                            //                            .background(Color.red)
+                            //                            .buttonStyle(.borderedProminent)
+                            //                            .padding()
+                            //                            .rotationEffect(Angle(degrees: 0))
+                            Button(action: damageUp, label: {
+                                Text("")
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            })
+                            //                            .cornerRadius(6)
+                            //                            .buttonStyle(.borderedProminent)
+                            //                            .rotationEffect(Angle(degrees: 0))
+                            //                            .padding()
+                        }.frame(maxHeight: blueGp.size.height / 3)
+                            .background(.red)
+                            .offset(y: blueGp.size.height/3)
+                        
+                        VLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
+
+                        ZStack {
+                            GeometryReader { geometry in
+                                Path {
+                                    path in
+                                    let width = geometry.size.width
+                                    let height = geometry.size.height
+                                    path.addLines([
+                                        CGPoint(x: width * 0.35, y: height * 0.4),
+                                        CGPoint(x: width * 0.35, y: height * 0.6),
+                                        CGPoint(x: width * 0.65, y: height * 0.6),
+                                        CGPoint(x: width * 0.65, y: height * 0.4),
+                                    ])
+                                    path.closeSubpath()
+                                }.fill(Color(red: 79.0 / 255, green: 79.0 / 255, blue: 191.0 / 255))
+                                //                                .stroke(.black, lineWidth: 20)
+                                    .stroke(.black, style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
+                            }
+                            Button(action: changeCommanderDamageColor, label: {
+                                Text(String(damage))
+                            })
+                            //                                .offset(x: -120)
+                                .rotationEffect(Angle(degrees: 90))
+                                .foregroundStyle(.white)
+                        }.offset(y: blueGp.size.height/3)
+                        ZStack {
+                            GeometryReader { geometry in
+                                Path {
+                                    path in
+                                    let width = geometry.size.width
+                                    let height = geometry.size.height
+                                    path.addLines([
+                                        CGPoint(x: width * 0.35, y: height * 0.4),
+                                        CGPoint(x: width * 0.35, y: height * 0.6),
+                                        CGPoint(x: width * 0.65, y: height * 0.6),
+                                        CGPoint(x: width * 0.65, y: height * 0.4),
+                                    ])
+                                    path.closeSubpath()
+                                }.fill(Color(red: 79.0 / 255, green: 79.0 / 255, blue: 191.0 / 255))
+                                //                                .stroke(.black, lineWidth: 20)
+                                    .stroke(.black, style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
+                            }
+                            Text(String(life))
+                            //                                .offset(x: -120)
+                                .rotationEffect(Angle(degrees: 90))
+                                .foregroundStyle(.white)
+                        }.offset(y: -blueGp.size.height/6)
+                    }
+                }
+            }
+    }
+}
 
 struct CommanderLife : View {
     func lifeUp() {
